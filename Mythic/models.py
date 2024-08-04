@@ -18,4 +18,4 @@ class Task(models.Model):
     previous_task = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subsequent_task')
 
     def __str__(self):
-        return self.id + ": " + self.description + " due " + self.due_date
+        return str(self.id) + ": " + self.description + " due " + str(self.due_date)

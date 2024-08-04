@@ -1,0 +1,26 @@
+{% extends "mythic/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h1>Create New Task</h1>
+    <form action="{% url 'create_task' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+    </form>
+
+    <form style="display: none;">
+        <textarea id="create-body" placeholder="New task"></textarea>
+        <br>
+        <label for="create-due-date">Due date:</label>
+        <input type="datetime-local" id="create-due-date" name="create-due-date">
+        <br>
+        <label for="create-schedule-date">Scheduled date:</label>
+        <input type="datetime-local" id="create-schedule-date" name="create-schedule-date">
+    </form>
+    <button id="create-submit" style="display: none;">Submit</button>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'mythic/create_task.js' %}"></script>
+{% endblock %}
