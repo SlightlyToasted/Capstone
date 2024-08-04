@@ -5,6 +5,7 @@ from .models import Task
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
 from django.urls import reverse
+from .models import Task
 
 class NewTaskForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea)
@@ -19,14 +20,17 @@ class NewTaskForm(forms.Form):
         )
     )
 
-
 # Create your views here.
 def index(request):
+    tasks = search(request)
     return render(request, "mythic/test_create_task.html", {
-        "form": NewTaskForm()
+        "form": NewTaskForm(),
+        "tasks": tasks
     })
 
+
 def create_task(request):
+    tasks = search(request)
     """ if request.method == "POST":
         data = json.loads(request.body)
         description = data.get("description", "")
@@ -39,9 +43,7 @@ def create_task(request):
         return JsonResponse({"message": "Task created successfully."}, status=201) """
     
     if request.method == "POST":
-        # Take in the data the user submitted and save it as form
         form = NewTaskForm(request.POST)
-        # Check if form data is valid (server-side)
         if form.is_valid():
             description = form.cleaned_data['description']
             due_date = form.cleaned_data['due_date']
@@ -52,11 +54,18 @@ def create_task(request):
 
             return HttpResponseRedirect(reverse("index"))
         else:
-            # If the form is invalid, re-render the page with existing information.
             return render(request, "mythic/test_create_task.html", {
-                "form": form
+                "form": form,
+                "tasks": tasks,
             })
-        
     return render(request, "mythic/test_create_task.html", {
-        "form": NewTaskForm()
+        "form": NewTaskForm(),
+        "tasks": tasks,
     })
+
+def search(request):
+    tasks = Task.objects.all()
+    return tasks
+
+def edit_task(request, task_id):
+    return HttpResponse("Hello")

@@ -3,24 +3,54 @@
 
 {% block body %}
     <h1>Create New Task</h1>
+    
     <form action="{% url 'create_task' %}" method="post">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit">
-    </form>
+        <div>
+            <textarea name="description" cols="60" rows="2" required="" id="id_description"></textarea>
+        </div>
 
-    <form style="display: none;">
-        <textarea id="create-body" placeholder="New task"></textarea>
-        <br>
-        <label for="create-due-date">Due date:</label>
-        <input type="datetime-local" id="create-due-date" name="create-due-date">
-        <br>
-        <label for="create-schedule-date">Scheduled date:</label>
-        <input type="datetime-local" id="create-schedule-date" name="create-schedule-date">
-    </form>
-    <button id="create-submit" style="display: none;">Submit</button>
+        <div>
+        <fieldset>
+            <legend for="id_due_date_month">Due date:</legend>
+            <select name="due_date_month" required="" id="id_due_date_month"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select><select name="due_date_day" required="" id="id_due_date_day"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select><select name="due_date_year" required="" id="id_due_date_year"><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option><option value="2031">2031</option><option value="2032">2032</option><option value="2033">2033</option>
+            </select>
+        </fieldset>
+    
+        </div>
+
+        <div>
+            <fieldset>
+        <legend for="id_scheduled_date_month">Scheduled date:</legend>
+        <select name="scheduled_date_month" required="" id="id_scheduled_date_month"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select><select name="scheduled_date_day" required="" id="id_scheduled_date_day"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select><select name="scheduled_date_year" required="" id="id_scheduled_date_year"><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option><option value="2031">2031</option><option value="2032">2032</option><option value="2033">2033</option></select>
+        </fieldset>
+    
+        </div>
+            <input type="submit">
+        </form>
+
+    <br>
+    <h1>Tasks</h1>
+    <ol>
+        {% for task in tasks %}
+            
+                <li>
+                    <div id="edit-task-body-{{ task.id }}" onclick="edit_task({{ task.id }})" class="tooltip">
+                        {{ task.description }}
+                        <span class="tooltiptext">Click on the text to edit</span>
+                    </div>
+                    <input id="edit-task-input-{{ task.id }}" type="text" style="display: none;">
+                    <button id="edit-task-btn-{{ task.id }}" style="display: none;" onclick="save_edit({{ task.id }})">Submit</button>
+                </li>
+        {% endfor %}
+    </ol>
+
+    <h2>Right Tooltip</h2>
+    <p>Move the mouse over the text below:</p>
+
 {% endblock %}
 
 {% block script %}
     <script src="{% static 'mythic/create_task.js' %}"></script>
 {% endblock %}
+

@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('#create-submit').addEventListener('click', create_task);
+    document.querySelector('#task-item').addEventListener('click', create_task);
   });
 
-function create_task(){
+/* function create_task(){
     description = document.querySelector('#create-body').value;
     due_date = document.querySelector('#create-due-date').value;
     schedule_date = document.querySelector('#create-schedule-date').value;
@@ -24,4 +24,21 @@ function create_task(){
         location.reload()
         
     });
+} */
+
+function edit_task(task_id){
+    old_text = document.querySelector(`#edit-task-body-${task_id}`).value;
+    document.querySelector(`#edit-task-input-${task_id}`).style.display = 'block';
+    document.querySelector(`#edit-task-btn-${task_id}`).style.display = 'block';
+    document.querySelector(`#edit-task-body-${task_id}`).style.display = 'none';
+    return false
+    
+}
+
+function save_edit(task_id){
+    document.querySelector(`#edit-task-input-${task_id}`).style.display = 'none';
+    document.querySelector(`#edit-task-btn-${task_id}`).style.display = 'none';
+    document.querySelector(`#edit-task-body-${task_id}`).style.display = 'block';
+    document.querySelector(`#edit-task-body-${task_id} > span`).style.display = 'block';
+    return false
 }
