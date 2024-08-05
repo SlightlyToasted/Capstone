@@ -19,3 +19,9 @@ class Task(models.Model):
 
     def __str__(self):
         return str(self.id) + ": " + self.description + " due " + str(self.due_date)
+    
+    def get_datetime(self):
+        return {
+            "due_date": self.due_date.strftime("%Y-%m-%d"),
+            "scheduled_date": self.scheduled_date.strftime("%Y-%m-%d")
+        }
