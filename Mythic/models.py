@@ -14,8 +14,11 @@ class Task(models.Model):
     category = models.CharField(max_length=64, blank=True, null=True)
     project = models.CharField(max_length=64, blank=True, null=True)
 
+    #relationships
+    is_header = models.BooleanField(default=False)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
-    previous_task = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subsequent_task')
+    next_task = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='previous_task')
+    order = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return str(self.id) + ": " + self.description + " due " + str(self.due_date)

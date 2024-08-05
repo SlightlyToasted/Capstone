@@ -58,7 +58,7 @@ function save_edit(task_id){
 
 
     console.log(description);
-    fetch(`/edit_task/${task_id}`, {
+    fetch(`/task/edit/${task_id}`, {
         method: 'PUT',
         body: JSON.stringify({
             description: description,
@@ -85,4 +85,30 @@ function save_edit(task_id){
         document.querySelector(`#edit-task-body-${task_id}`).style.display = 'inline';
     }) 
        
+}
+
+function move_up(task_id){
+    fetch(`/task/reorder/${task_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            direction: 'up',
+        })
+    })
+    .then(response => {
+        location.reload()
+    }) 
+
+}
+
+function move_down(task_id){
+    fetch(`/task/reorder/${task_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            direction: 'down',
+        })
+    })
+    .then(response => {
+        location.reload()
+    }) 
+
 }

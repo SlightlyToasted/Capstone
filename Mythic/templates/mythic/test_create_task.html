@@ -16,7 +16,7 @@
     <ol>
         {% for task in tasks %}
             
-                <li>
+                <li >
                     <div id="edit-task-body-{{ task.id }}" onclick="edit_task({{ task.id }})" class="tooltip">
                         {{ task.description }} | <b>Due on:</b> {{ task.get_datetime.due_date }} | <b>Scheduled for:</b> {{ task.get_datetime.scheduled_date}}
                         <span class="tooltiptext">Click on the text to edit</span>
@@ -34,6 +34,9 @@
                         </div>
                         <button id="edit-task-btn-{{ task.id }}"  onclick="save_edit({{ task.id }})">Submit</button>    
                     </div>
+
+                    <button style="border: none; background-color: transparent;" onclick="move_up({{ task.id }})">↑</button>
+                    <button style="border: none; background-color: transparent;" onclick="move_down({{ task.id }})">↓</button>
                 </li>
         {% endfor %}
     </ol>
