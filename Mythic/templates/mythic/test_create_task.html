@@ -2,6 +2,10 @@
 {% load static %}
 
 {% block body %}
+    <h1>Test form</h1>
+
+
+    
     <h1>Create New Task</h1>
     
     <form action="{% url 'create_task' %}" method="post">
@@ -30,6 +34,16 @@
         </form>
 
     <br>
+
+    <h1>Test</h1>
+    <form action="{% url 'create_task' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form>
+    
+
+
     <h1>Tasks</h1>
     <ol>
         {% for task in tasks %}

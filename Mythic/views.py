@@ -6,18 +6,17 @@ from django.views.decorators.csrf import csrf_exempt
 from django import forms
 from django.urls import reverse
 from .models import Task
+import datetime
+
+from django.contrib.admin.widgets import AdminDateWidget
 
 class NewTaskForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea)
     due_date = forms.DateField(
-        widget=forms.SelectDateWidget(
-            empty_label=("Choose Year", "Choose Month", "Choose Day"),
-        )
-    )
-    scheduled_date = forms.DateField(
-        widget=forms.SelectDateWidget(
-            empty_label=("Choose Year", "Choose Month", "Choose Day"),
-        )
+        label="Due date",
+        required=True,
+        widget=forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
+        input_formats=["%Y-%m-%d"]
     )
 
 # Create your views here.
@@ -31,19 +30,17 @@ def index(request):
 
 def create_task(request):
     tasks = search(request)
-    
     if request.method == "POST":
         form = NewTaskForm(request.POST)
         if form.is_valid():
             description = form.cleaned_data['description']
-            due_date = form.cleaned_data['due_date']
-            scheduled_date = form.cleaned_data['scheduled_date']
+            due_date: datetime.date = form.cleaned_data["due_date"]
 
-            new_task = Task(description=description, due_date=due_date, scheduled_date=scheduled_date)
+            new_task = Task(description=description, due_date=due_date)
             new_task.save()
-
             return HttpResponseRedirect(reverse("index"))
         else:
+            print("Fail")
             return render(request, "mythic/test_create_task.html", {
                 "form": form,
                 "tasks": tasks,
