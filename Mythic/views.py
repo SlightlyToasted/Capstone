@@ -31,16 +31,6 @@ def index(request):
 
 def create_task(request):
     tasks = search(request)
-    """ if request.method == "POST":
-        data = json.loads(request.body)
-        description = data.get("description", "")
-        due_date = data.get("due_date", "")
-        scheduled_date = data.get("scheduled_date", "")
-
-        new_task = Task(description=description, due_date=due_date, scheduled_date=scheduled_date)
-
-        new_task.save()
-        return JsonResponse({"message": "Task created successfully."}, status=201) """
     
     if request.method == "POST":
         form = NewTaskForm(request.POST)
@@ -67,5 +57,19 @@ def search(request):
     tasks = Task.objects.all()
     return tasks
 
+@csrf_exempt
 def edit_task(request, task_id):
-    return HttpResponse("Hello")
+    data = json.loads(request.body)
+    task = Task.objects.get(pk=task_id)
+
+    # Return email contents
+    if request.method == "GET":
+        return JsonResponse(task.serialize())
+    
+    if request.method == "PUT":
+        #due_date = data.get("due_date", "")
+        #scheduled_date = data.get("scheduled_date", "")
+
+        task.description = data["description"]
+        task.save()
+        return HttpResponse(status=204)

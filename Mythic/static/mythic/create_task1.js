@@ -36,7 +36,6 @@ function edit_task(task_id){
 }
 
 function save_edit(task_id){
-    alert("Test")
     description = document.querySelector(`#edit-task-input-${task}`).value;
 
     fetch(`/edit_task/${task_id}`, {
