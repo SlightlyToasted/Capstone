@@ -104,3 +104,6 @@ def reorder_task(request, task_id):
                 previous_task = Task.objects.get(next_task=task)
                 previous_task.order += 1
                 return HttpResponse(status=204)
+            
+def drag_drop_list(request):
+    return render(request, "mythic/drag_drop.html")

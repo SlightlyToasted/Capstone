@@ -10,5 +10,8 @@ urlpatterns = [
 
     #Search
     path("task/datetime/<int:task_id>", views.task_datetime, name="task_datetime"),
+
+    #sandbox
+    path("list", views.drag_drop_list, name="drag_drop_list"),
    
 ]
