@@ -3,7 +3,6 @@
 
 {% block body %}
     <h1>Create New Task</h1>
-    <h1>Test</h1>
     <form action="{% url 'create_task' %}" method="post">
         {% csrf_token %}
         {{ form }}
@@ -13,13 +12,11 @@
 
 
     <h1>Tasks</h1>
-    <ol>
+    <ul class="sortable-list">
         {% for task in tasks %}
-            
-                <li >
-                    <div id="edit-task-body-{{ task.id }}" onclick="edit_task({{ task.id }})" class="tooltip">
-                        {{ task.description }} | <b>Due on:</b> {{ task.get_datetime.due_date }} | <b>Scheduled for:</b> {{ task.get_datetime.scheduled_date}}
-                        <span class="tooltiptext">Click on the text to edit</span>
+                <li class="item" draggable="true">
+                    <div id="edit-task-body-{{ task.id }}" onclick="edit_task({{ task.id }})" class="details">
+                        <span>{{ task.description }}  <b>Due:</b> {{ task.get_datetime.due_date }}  <b>Scheduled:</b> {{ task.get_datetime.scheduled_date}}</span>
                     </div>
                     
                     <div id="edit-task-form-{{ task.id }}" style="display: none;">
@@ -35,15 +32,14 @@
                         <button id="edit-task-btn-{{ task.id }}"  onclick="save_edit({{ task.id }})">Submit</button>    
                     </div>
 
-                    <button style="border: none; background-color: transparent;" onclick="move_up({{ task.id }})">↑</button>
-                    <button style="border: none; background-color: transparent;" onclick="move_down({{ task.id }})">↓</button>
+                    
                 </li>
         {% endfor %}
-    </ol>
+    </ul>
 
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'mythic/create_task3.js' %}"></script>
+    <script src="{% static 'mythic/create_task4.js' %}"></script>
 {% endblock %}
 
