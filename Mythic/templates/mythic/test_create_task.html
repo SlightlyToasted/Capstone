@@ -16,7 +16,9 @@
         {% for task in tasks %}
                 <li class="item" draggable="true">
                     <div id="edit-task-body-{{ task.id }}" onclick="edit_task({{ task.id }})" class="details">
-                        <span>{{ task.description }}  <b>Due:</b> {{ task.get_datetime.due_date }}  <b>Scheduled:</b> {{ task.get_datetime.scheduled_date}}</span>
+                        <span>
+                            {{ task.description }}  <b>Due:</b> {{ task.get_datetime.due_date }}  <b>Scheduled:</b> {{ task.get_datetime.scheduled_date}}
+                        </span>
                     </div>
                     
                     <div id="edit-task-form-{{ task.id }}" style="display: none;">
@@ -40,6 +42,6 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'mythic/create_task4.js' %}"></script>
+    <script src="{% static 'mythic/create_task5.js' %}"></script>
 {% endblock %}
 

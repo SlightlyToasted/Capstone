@@ -80,30 +80,22 @@ def edit_task(request, task_id):
         task.save()
         return HttpResponse(status=204)
     
+#retrieve due date and scheduled date for a task
 def task_datetime(request, task_id):
     task = Task.objects.get(pk=task_id)
     if request.method == "GET":
         return JsonResponse(task.get_datetime())
+        
+#sandbox for testing
+def drag_drop_list(request):
+    return render(request, "mythic/drag_drop.html")
 
+#retrieve order
 @csrf_exempt
-def reorder_task(request, task_id):
+def task_order(request, task_id):
     data = json.loads(request.body)
     task = Task.objects.get(pk=task_id)
     if request.method == "PUT":
-        if data["direction"] == "down":
-            #move_down
-            if task.next_task.order > 0:
-                print(task.order)
-                task.order = 1
-                task.next_task.order = 0
-                print(task.order)
-                return HttpResponse(status=204)
-        if data["direction"] == "up":
-            if task.order > 0:
-                task.order -= 1
-                previous_task = Task.objects.get(next_task=task)
-                previous_task.order += 1
-                return HttpResponse(status=204)
-            
-def drag_drop_list(request):
-    return render(request, "mythic/drag_drop.html")
+        task.order = data["order"]
+        task.save()
+        return HttpResponse(status=204)
