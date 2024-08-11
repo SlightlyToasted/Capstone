@@ -2,42 +2,45 @@
 {% load static %}
 
 {% block body %}
-    <h1>Create New Task</h1>
-    <form action="{% url 'create_task' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Submit">
-    </form>
-    
+    <div class="container" style="display: none;">
+        <h1>Create New Task</h1>
+        <form action="{% url 'create_task' %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 
-
-    <h1>Tasks</h1>
-    <ul class="sortable-list">
+    <div class="sortable-list">
+        <h1>Tasks</h1>
         {% for task in tasks %}
-                <li class="item" draggable="true">
-                    <div id="edit-task-body-{{ task.id }}" onclick="edit_task({{ task.id }})" class="details">
-                        <span>
-                            {{ task.description }}  <b>Due:</b> {{ task.get_datetime.due_date }}  <b>Scheduled:</b> {{ task.get_datetime.scheduled_date}}
-                        </span>
+            <div class="item" draggable="true">
+                <!-- <div class="project-colour"></div> -->
+                <div id="edit-task-body-{{ task.id }}" onclick="edit_task({{ task.id }})" class="details">
+                    <span class="description">
+                        {{ task.description }}
+                    </span>
+                    <span class="date"><b>Due:</b> {{ task.get_datetime.due_date }}  <b>Scheduled:</b> {{ task.get_datetime.scheduled_date}}</span>
+                </div>
+                
+                <div id="edit-task-form-{{ task.id }}" style="display: none;">
+                    <input id="edit-task-input-{{ task.id }}" type="text">
+                    <div>
+                        <label for="id_due_date">Due date:</label>
+                        <input type="date" name="due_date" required="" id="input-due-date-{{ task.id }}">
                     </div>
-                    
-                    <div id="edit-task-form-{{ task.id }}" style="display: none;">
-                        <input id="edit-task-input-{{ task.id }}" type="text">
-                        <div>
-                            <label for="id_due_date">Due date:</label>
-                            <input type="date" name="due_date" required="" id="input-due-date-{{ task.id }}">
-                        </div>
-                        <div>
-                            <label for="input-scheduled-date-{{ task.id }}">Scheduled date:</label>
-                            <input type="date" name="scheduled_date" required="" id="input-scheduled-date-{{ task.id }}">
-                        </div>
-                        <button id="edit-task-btn-{{ task.id }}"  onclick="save_edit({{ task.id }})">Submit</button>    
+                    <div>
+                        <label for="input-scheduled-date-{{ task.id }}">Scheduled date:</label>
+                        <input type="date" name="scheduled_date" required="" id="input-scheduled-date-{{ task.id }}">
                     </div>
+                    <button id="edit-task-btn-{{ task.id }}"  onclick="save_edit({{ task.id }})">Submit</button>    
+                </div>
 
-                    
-                </li>
+                <input type="checkbox" name="" class="task-checkbox">
+                
+            </div>
         {% endfor %}
-    </ul>
+        </div>
 
 {% endblock %}
 

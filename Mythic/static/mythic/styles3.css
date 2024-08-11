@@ -51,21 +51,21 @@ body {
   opacity: 0;
 }
 
-.item .details {
+.details {
   display: grid;
   grid:
-      "proj-col description checkbox" auto
-      "........ dates       checkbox" auto /
+      "proj-col description" auto
+      "........ dates      " auto /
       1fr minmax(100px, 300px) 1fr;
 }
 
-.details .date {
+.date {
   grid-area: dates;
   font-size: 0.85em;
   color: #A9A9A9; /* Light grey */
 }
 
-.details .description {
+.description {
   grid-area: description;
   text-align: left;
 }
@@ -77,6 +77,12 @@ body {
   background-color: cornflowerblue;
 }
 
-.task-checkbox {
-  grid-area: checkbox;
+[type="checkbox"] {
+  opacity:0;
+  position:absolute;
+}
+
+.custom-checkbox {
+  display: inline-block;
+  width: .75em
 }

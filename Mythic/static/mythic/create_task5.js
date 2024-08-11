@@ -47,10 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function edit_task(task_id){
     //Fill in description
-    old_text = document.querySelector(`#edit-task-body-${task_id}`).children[0].innerHTML;
-    let cleaned_text = old_text.split("<");
-    cleaned_text = cleaned_text.map(part => part.trim());
-    document.querySelector(`#edit-task-input-${task_id}`).value = cleaned_text[0];
+    document.querySelector(`#edit-task-input-${task_id}`).value = document.querySelector(`#edit-task-body-${task_id}`).children[0].innerHTML.trim();
 
     //fetch dates
     fetch(`/task/datetime/${task_id}`, {
@@ -90,8 +87,11 @@ function save_edit(task_id){
         document.querySelector(`#edit-task-input-${task_id}`).value = "";
 
         //save new value into the list item 
-        list_item = document.querySelector(`#edit-task-body-${task_id}`)
-        list_item.innerHTML = `<span>${description} | <b>Due on:</b> ${due_date} | <b>Scheduled for:</b> ${scheduled_date} </span>`;
+        list_item = document.querySelector(`#edit-task-body-${task_id}`).children[0];
+        list_item.innerHTML = description;
+        date = document.querySelector(`#edit-task-body-${task_id}`).children[1];
+        date.innerHTML = `<b>Due:</b> ${due_date} <b>Scheduled:</b> ${scheduled_date}`
+
         
         /* 
         //create new tooltip
@@ -102,7 +102,7 @@ function save_edit(task_id){
 
         //hide input and show task
         document.querySelector(`#edit-task-form-${task_id}`).style.display = 'none';
-        document.querySelector(`#edit-task-body-${task_id}`).style.display = 'inline';
+        document.querySelector(`#edit-task-body-${task_id}`).style.display = 'flex';
     }) 
        
 }
