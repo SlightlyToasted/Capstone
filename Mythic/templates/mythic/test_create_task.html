@@ -15,7 +15,7 @@
         <h1>Tasks</h1>
         {% for task in tasks %}
             <div class="item" draggable="true">
-                <!-- <div class="project-colour"></div> -->
+                <div class="project-colour"></div> 
                 <div id="edit-task-body-{{ task.id }}" onclick="edit_task({{ task.id }})" class="details">
                     <span class="description">
                         {{ task.description }}
@@ -36,8 +36,10 @@
                     <button id="edit-task-btn-{{ task.id }}"  onclick="save_edit({{ task.id }})">Submit</button>    
                 </div>
 
-                <input type="checkbox" name="" class="task-checkbox">
-                
+                <div class="checkbox-area">
+                    <input type="checkbox" name="">
+                    <!-- <span class="custom-checkbox"></span> -->
+                </div>
             </div>
         {% endfor %}
         </div>
