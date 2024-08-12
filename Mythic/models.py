@@ -12,7 +12,7 @@ class Task(models.Model):
     end_time = models.DateTimeField(auto_now=False, auto_now_add=False,null=True, blank=True)
 
     category = models.CharField(max_length=64, blank=True, null=True)
-    project = models.CharField(max_length=64, blank=True, null=True)
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, null=True, blank=True, related_name='tasks')
 
     #relationships
     is_header = models.BooleanField(default=False)
@@ -27,3 +27,10 @@ class Task(models.Model):
             "due_date": self.due_date.strftime("%Y-%m-%d"),
             "scheduled_date": self.scheduled_date.strftime("%Y-%m-%d")
         }
+    
+class Project(models.Model):
+    name = models.CharField(max_length=120)
+    colour = models.CharField(max_length=10)
+    
+    def __str__(self):
+        return "Project " + str(self.id) + ": " + self.name

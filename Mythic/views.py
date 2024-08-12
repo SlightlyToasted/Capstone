@@ -1,14 +1,12 @@
 import json
+import datetime
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import Task
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
 from django.urls import reverse
-from .models import Task
-import datetime
-
-from django.contrib.admin.widgets import AdminDateWidget
+from .models import Task, Project
 
 class NewTaskForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea)
@@ -68,9 +66,9 @@ def search(request, q):
         tasks = Task.objects.all().order_by('order')
     return tasks
 
-# edit all fields or get a jsonResponse containing details
+# edit fields or get a jsonResponse containing details
 @csrf_exempt
-def edit_task(request, task_id):
+def task(request, task_id):
     data = json.loads(request.body)
     task = Task.objects.get(pk=task_id)
 
@@ -96,8 +94,10 @@ def edit_task(request, task_id):
         if "completed" in data:
             task.completed = data["completed"]
         if "order" in data:
-          
             task.order = data["order"]
+        if "project" in data:
+            project = Project.objects.get(name=data["project"])
+            task.project = project
         task.save()
         return HttpResponse(status=204)
     

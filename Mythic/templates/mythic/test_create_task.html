@@ -15,7 +15,7 @@
         <h1>Tasks</h1>
         {% for task in tasks %}
             <div class="item" draggable="true">
-                <div id="proj-colour-{{ task.id }}" class="project-colour"></div> 
+                <div id="proj-colour-{{ task.id }}" class="project-colour" style="background-color: #{{ task.project.colour }};"></div> 
                 <div id="edit-task-body-{{ task.id }}" onclick="edit_task({{ task.id }})" class="details">
                     <span class="description">
                         {{ task.description }}
