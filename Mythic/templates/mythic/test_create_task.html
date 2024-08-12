@@ -37,7 +37,11 @@
                 </div>
 
                 <div class="checkbox-area">
-                    <input type="checkbox" name="">
+                    {% if task.completed %}  
+                        <input id="checkbox-{{ task.id }}" type="checkbox" onchange="complete({{ task.id }})" checked>
+                    {% else %}
+                        <input id="checkbox-{{ task.id }}" type="checkbox" onchange="complete({{ task.id }})">
+                    {% endif %}
                     <!-- <span class="custom-checkbox"></span> -->
                 </div>
             </div>
@@ -47,6 +51,6 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'mythic/create_task5.js' %}"></script>
+    <script src="{% static 'mythic/create_task6.js' %}"></script>
 {% endblock %}
 

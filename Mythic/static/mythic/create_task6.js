@@ -31,9 +31,13 @@ document.addEventListener('DOMContentLoaded', function() {
         updated_list.forEach(function(item, index) {
             arry = item.children[0].id.split("-");
             task_id = arry[arry.length-1];
-            fetch(`/task/order/${task_id}`, {
+            fetch(`/task/edit/${task_id}`, {
                 method: 'PUT',
                 body: JSON.stringify({
+             /*        description: null,
+                    due_date: null,
+                    scheduled_date: null,
+                    completed: null, */
                     order: index,
                 })
             }); 
@@ -73,13 +77,14 @@ function save_edit(task_id){
     scheduled_date = document.querySelector(`#input-scheduled-date-${task_id}`).value
 
 
-    console.log(description);
     fetch(`/task/edit/${task_id}`, {
         method: 'PUT',
         body: JSON.stringify({
             description: description,
             due_date: due_date,
             scheduled_date: scheduled_date,
+           /*  completed: null,
+            order: null, */
         })
     })
     .then(response => {
@@ -107,28 +112,16 @@ function save_edit(task_id){
        
 }
 
-function move_up(task_id){
-    fetch(`/task/reorder/${task_id}`, {
+function complete(task_id){
+    // get checkbox and check if checked.
+    checked = document.querySelector(`#checkbox-${task_id}`).checked;
+    fetch(`/task/edit/${task_id}`, {
         method: 'PUT',
         body: JSON.stringify({
-            direction: 'up',
+            completed: checked,
         })
     })
     .then(response => {
-        location.reload()
+       
     }) 
-
-}
-
-function move_down(task_id){
-    fetch(`/task/reorder/${task_id}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-            direction: 'down',
-        })
-    })
-    .then(response => {
-        location.reload()
-    }) 
-
 }

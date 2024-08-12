@@ -71,12 +71,16 @@ def edit_task(request, task_id):
         return JsonResponse(task.serialize())
     
     if request.method == "PUT":
-        #due_date = data.get("due_date", "")
-        #scheduled_date = data.get("scheduled_date", "")
-
-        task.description = data["description"]
-        task.due_date = data["due_date"]
-        task.scheduled_date = data["scheduled_date"]
+        if "description" in data:
+            task.description = data["description"]
+        if "due_date" in data:
+            task.due_date = data["due_date"]
+        if "scheduled_date" in data:
+            task.scheduled_date = data["scheduled_date"]
+        if "completed" in data:
+            task.completed = data["completed"]
+        if "order" in data:
+            task.order = data["order"]
         task.save()
         return HttpResponse(status=204)
     
