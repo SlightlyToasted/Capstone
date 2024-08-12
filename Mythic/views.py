@@ -27,13 +27,17 @@ class NewTaskForm(forms.Form):
 
 # Create your views here.
 def index(request):
-    tasks = search(request)
+    tasks = search(request, "no_parents")
     return render(request, "mythic/test_create_task.html", {
         "form": NewTaskForm(),
         "tasks": tasks
     })
 
+#sandbox for testing
+def drag_drop_list(request):
+    return render(request, "mythic/drag_drop.html")
 
+#Create a new task
 def create_task(request):
     tasks = search(request)
     if request.method == "POST":
@@ -47,7 +51,7 @@ def create_task(request):
             new_task.save()
             return HttpResponseRedirect(reverse("index"))
         else:
-            print("Fail")
+            
             return render(request, "mythic/test_create_task.html", {
                 "form": form,
                 "tasks": tasks,
@@ -57,10 +61,14 @@ def create_task(request):
         "tasks": tasks,
     })
 
-def search(request):
-    tasks = Task.objects.all().order_by('order')
+def search(request, q):
+    if q == "no_parents":
+        tasks = Task.objects.filter(parent__isnull=True).order_by('order')
+    else:
+        tasks = Task.objects.all().order_by('order')
     return tasks
 
+# edit all fields or get a jsonResponse containing details
 @csrf_exempt
 def edit_task(request, task_id):
     data = json.loads(request.body)
@@ -71,6 +79,14 @@ def edit_task(request, task_id):
         return JsonResponse(task.serialize())
     
     if request.method == "PUT":
+
+        if "parent" in data:
+            parent_id = data["parent"]
+            if parent_id == "":
+                task.parent = None
+            else:
+                task.parent = Task.objects.get(pk=parent_id)
+                
         if "description" in data:
             task.description = data["description"]
         if "due_date" in data:
@@ -80,6 +96,7 @@ def edit_task(request, task_id):
         if "completed" in data:
             task.completed = data["completed"]
         if "order" in data:
+          
             task.order = data["order"]
         task.save()
         return HttpResponse(status=204)
@@ -89,17 +106,3 @@ def task_datetime(request, task_id):
     task = Task.objects.get(pk=task_id)
     if request.method == "GET":
         return JsonResponse(task.get_datetime())
-        
-#sandbox for testing
-def drag_drop_list(request):
-    return render(request, "mythic/drag_drop.html")
-
-#retrieve order
-@csrf_exempt
-def task_order(request, task_id):
-    data = json.loads(request.body)
-    task = Task.objects.get(pk=task_id)
-    if request.method == "PUT":
-        task.order = data["order"]
-        task.save()
-        return HttpResponse(status=204)

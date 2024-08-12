@@ -15,12 +15,16 @@
         <h1>Tasks</h1>
         {% for task in tasks %}
             <div class="item" draggable="true">
-                <div class="project-colour"></div> 
+                <div id="proj-colour-{{ task.id }}" class="project-colour"></div> 
                 <div id="edit-task-body-{{ task.id }}" onclick="edit_task({{ task.id }})" class="details">
                     <span class="description">
                         {{ task.description }}
                     </span>
-                    <span class="date"><b>Due:</b> {{ task.get_datetime.due_date }}  <b>Scheduled:</b> {{ task.get_datetime.scheduled_date}}</span>
+                    <span class="date"><span class="material-symbols-outlined">
+                        schedule
+                    </span> {{ task.get_datetime.due_date }}  <span class="material-symbols-outlined">
+                            event
+                    </span> {{ task.get_datetime.scheduled_date}}</span>
                 </div>
                 
                 <div id="edit-task-form-{{ task.id }}" style="display: none;">
@@ -45,12 +49,54 @@
                     <!-- <span class="custom-checkbox"></span> -->
                 </div>
             </div>
+
+            {% for child in task.children.all %}
+                <div class="item indented" draggable="true">
+                    <div id="proj-colour-{{ child.id }}" class="project-colour"></div> 
+                    <div id="edit-task-body-{{ child.id }}" onclick="edit_task({{ child.id }})" class="details">
+                        <span class="description">
+                            {{ child.description }}
+                        </span>
+                        <span class="date">
+                            <span class="material-symbols-outlined">
+                                schedule
+                                </span>
+                            {{ child.get_datetime.due_date }}  
+                            <span class="material-symbols-outlined">
+                                event </span> 
+                            {{ child.get_datetime.scheduled_date}}
+                        </span>
+                    </div>
+                    
+                    <div id="edit-task-form-{{ child.id }}" style="display: none;">
+                        <input id="edit-task-input-{{ child.id }}" type="text">
+                        <div>
+                            <label for="id_due_date">Due date:</label>
+                            <input type="date" name="due_date" required="" id="input-due-date-{{ child.id }}">
+                        </div>
+                        <div>
+                            <label for="input-scheduled-date-{{ child.id }}">Scheduled date:</label>
+                            <input type="date" name="scheduled_date" required="" id="input-scheduled-date-{{ child.id }}">
+                        </div>
+                        <button id="edit-task-btn-{{ child.id }}"  onclick="save_edit({{ child.id }})">Submit</button>    
+                    </div>
+
+                    <div class="checkbox-area">
+                        {% if child.completed %}  
+                            <input id="checkbox-{{ child.id }}" type="checkbox" onchange="complete({{ child.id }})" checked>
+                        {% else %}
+                            <input id="checkbox-{{ child.id }}" type="checkbox" onchange="complete({{ child.id }})">
+                        {% endif %}
+                        <!-- <span class="custom-checkbox"></span> -->
+                    </div>
+                </div>
+            {% endfor %}
         {% endfor %}
         </div>
 
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'mythic/create_task6.js' %}"></script>
+    <script src="{% static 'mythic/create_task7.js' %}"></script>
 {% endblock %}
 

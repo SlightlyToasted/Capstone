@@ -120,5 +120,9 @@ body {
 .indented {
   margin-left: 50px; 
   padding: 0px;
+  width:auto;
+}
 
+.material-symbols-outlined{
+  font-size: 12px;
 }

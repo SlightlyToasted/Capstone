@@ -1,145 +1,153 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Drag and Drop Test</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <title>Drag and Drop To-Do List</title>
     <style>
-        /* Import Google font - Poppins */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-        * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
-        }
         body {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        background: #595DB8;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        .sortable-list {
-        width: 425px;
-        padding: 25px;
-        background: #fff;
-        border-radius: 7px;
-        padding: 30px 25px 20px;
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+
+        .todo-container {
+            width: 300px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
-        .sortable-list .item {
-        list-style: none;
-        display: flex;
-        cursor: move;
-        background: #fff;
-        align-items: center;
-        border-radius: 5px;
-        padding: 10px 13px;
-        margin-bottom: 11px;
-        /* box-shadow: 0 2px 4px rgba(0,0,0,0.06); */
-        border: 1px solid #ccc;
-        justify-content: space-between;
+
+        .todo-input-container {
+            display: flex;
+            margin-bottom: 20px;
         }
-        .item .details {
-        display: flex;
-        align-items: center;
+
+        .todo-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
-        .item .details img {
-        height: 43px;
-        width: 43px;
-        pointer-events: none;
-        margin-right: 12px;
-        object-fit: cover;
-        border-radius: 50%;
+
+        .add-task-button {
+            padding: 10px;
+            margin-left: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
         }
-        .item .details span {
-        font-size: 1.13rem;
+
+        .add-task-button:hover {
+            background-color: #0056b3;
         }
-        .item i {
-        color: #474747;
-        font-size: 1.13rem;
+
+        .todo-item {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #eee;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: grab;
+            margin-left: 0;
+            transition: margin-left 0.2s ease;
         }
-        .item.dragging {
-        opacity: 0.6;
+
+        .todo-item.dragging {
+            opacity: 0.5;
         }
-        .item.dragging :where(.details, i) {
-        opacity: 0;
+
+        .indented {
+            margin-left: 20px;
         }
     </style>
-  </head>
-  <body>
-    <ul class="sortable-list">
-      <li class="item" draggable="true">
-        <div class="details">
-          <span>Task 1</span>
+</head>
+<body>
+    <div class="todo-container">
+        <div class="todo-input-container">
+            <input type="text" id="todoInput" class="todo-input" placeholder="Add a new task">
+            <button id="addTaskButton" class="add-task-button">Add</button>
         </div>
-        <i class="uil uil-draggabledots"></i>
-      </li>
-      <li class="item" draggable="true">
-        <div class="details">
-          <span>Task 2</span>
+        <div id="todoList">
+            <div class="todo-item" draggable="true">Task 1</div>
+            <div class="todo-item" draggable="true">Task 2</div>
+            <div class="todo-item" draggable="true">Task 3</div>
         </div>
-        <i class="uil uil-draggabledots"></i>
-      </li>
-      <li class="item" draggable="true">
-        <div class="details">
-          <span>Task 3</span>
-        </div>
-        <i class="uil uil-draggabledots"></i>
-      </li>
-      <li class="item" draggable="true">
-        <div class="details">
-          <span>Task 4</span>
-        </div>
-        <i class="uil uil-draggabledots"></i>
-      </li>
-      <li class="item" draggable="true">
-        <div class="details">
-          <span>Task 5</span>
-        </div>
-        <i class="uil uil-draggabledots"></i>
-      </li>
-      <li class="item" draggable="true">
-        <div class="details">
-          <span>Task 6</span>
-        </div>
-        <i class="uil uil-draggabledots"></i>
-      </li>
-    </ul>
+    </div>
 
     <script>
-        const sortableList = document.querySelector(".sortable-list");
-        const items = sortableList.querySelectorAll(".item");
+        const todoList = document.getElementById('todoList');
+        const addTaskButton = document.getElementById('addTaskButton');
+        const todoInput = document.getElementById('todoInput');
+        let draggingItem = null;
 
-        items.forEach(item => {
-            item.addEventListener("dragstart", () => {
-                // Adding dragging class to item after a delay
-                setTimeout(() => item.classList.add("dragging"), 0);
-            });
-            // Removing dragging class from item on dragend event
-            item.addEventListener("dragend", () => item.classList.remove("dragging"));
-        });
-
-        const initSortableList = (e) => {
-            e.preventDefault();
-            const draggingItem = document.querySelector(".dragging");
-            // Getting all items except currently dragging and making array of them
-            let siblings = [...sortableList.querySelectorAll(".item:not(.dragging)")];
-
-            // Finding the sibling after which the dragging item should be placed
-            let nextSibling = siblings.find(sibling => {
-                return e.clientY <= sibling.offsetTop + sibling.offsetHeight / 2;
+        function addDragAndDropEvents(item) {
+            item.addEventListener('dragstart', () => {
+                draggingItem = item;
+                setTimeout(() => {
+                    item.classList.add('dragging');
+                }, 0);
             });
 
-            // Inserting the dragging item before the found sibling
-            sortableList.insertBefore(draggingItem, nextSibling);
+            item.addEventListener('dragend', () => {
+                item.classList.remove('dragging');
+                draggingItem = null;
+            });
+
+            item.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const draggingOverItem = e.target;
+                const container = draggingOverItem.parentNode;
+                const siblings = Array.from(container.children);
+                const draggingOverIndex = siblings.indexOf(draggingOverItem);
+                const draggingItemIndex = siblings.indexOf(draggingItem);
+
+                if (draggingOverIndex > draggingItemIndex) {
+                    container.insertBefore(draggingItem, draggingOverItem.nextSibling);
+                    
+                    // Check if the item is dropped below another item to indent
+                    if (draggingOverIndex === draggingItemIndex + 1) {
+                        draggingItem.classList.add('indented');
+                    } else {
+                        draggingItem.classList.remove('indented');
+                    }
+                } else {
+                    container.insertBefore(draggingItem, draggingOverItem);
+                    draggingItem.classList.remove('indented');
+                }
+            });
         }
 
-        sortableList.addEventListener("dragover", initSortableList);
-        sortableList.addEventListener("dragenter", e => e.preventDefault());
-    </script>
+        function createTask(taskText) {
+            const taskItem = document.createElement('div');
+            taskItem.classList.add('todo-item');
+            taskItem.setAttribute('draggable', 'true');
+            taskItem.textContent = taskText;
 
-  </body>
+            addDragAndDropEvents(taskItem);
+
+            return taskItem;
+        }
+
+        addTaskButton.addEventListener('click', () => {
+            const taskText = todoInput.value.trim();
+            if (taskText !== "") {
+                const newTask = createTask(taskText);
+                todoList.appendChild(newTask);
+                todoInput.value = "";
+            }
+        });
+
+        todoList.querySelectorAll('.todo-item').forEach(item => {
+            addDragAndDropEvents(item);
+        });
+    </script>
+</body>
 </html>

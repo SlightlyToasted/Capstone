@@ -17,7 +17,6 @@ class Task(models.Model):
     #relationships
     is_header = models.BooleanField(default=False)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
-    next_task = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='previous_task')
     order = models.IntegerField(null=True, blank=True)
 
     def __str__(self):

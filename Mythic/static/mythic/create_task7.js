@@ -17,29 +17,77 @@ document.addEventListener('DOMContentLoaded', function() {
         const draggingItem = document.querySelector(".dragging");
         // Getting all items except currently dragging and making array of them
         let siblings = [...sortableList.querySelectorAll(".item:not(.dragging)")];
+        let dragged_item = sortableList.querySelector(".item.dragging");
 
         // Finding the sibling after which the dragging item should be placed
         let nextSibling = siblings.find(sibling => {
             return e.clientY <= sibling.offsetTop + sibling.offsetHeight / 2;
         });
-    
+            
+        if (typeof nextSibling != 'undefined'){
+            if (e.clientX >= nextSibling.offsetLeft + nextSibling.offsetWidth / 2){
+                dragged_item.classList.add("indented");
+                
+            }
+            else {
+                dragged_item.classList.remove("indented");
+            }
+        }
         sortableList.insertBefore(draggingItem, nextSibling);
     }
 
     function set_order() {
-        updated_list = document.querySelectorAll(".item");
-        alert(updated_list)
-        /* updated_list.forEach(function(item, index) {
-            arry = item.children[0].id.split("-");
-            console.log(arry)
+        updated_list = document.querySelectorAll(".item:not(.indented)");
+        updated_list.forEach(function(item, index) {
+
+            arry = item.children[1].id.split("-");
             task_id = arry[arry.length-1];
+         
             fetch(`/task/${task_id}`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     order: index,
+                    parent: "",
                 })
-            }); 
-        }); */
+            });
+        });
+
+        //if a task is indented, find first task above that is not indented. Make that the parent.
+        all_tasks = document.querySelectorAll(".item");
+        all_tasks.forEach((item, index) => {
+            if (item.classList.contains('indented')) {
+                console.log("Indented item at index " + index.toString());
+                let firstNonIndentedBefore = null;
+
+                for (let i = index - 1; i >= 0; i--) {
+                    
+                    if (!all_tasks[i].classList.contains('indented')) {
+                        firstNonIndentedBefore = all_tasks[i];
+                        console.log(firstNonIndentedBefore);
+                        console.log(item);
+                        break;
+                    }
+                }
+                
+                if (firstNonIndentedBefore != null) {
+                    child_arry = item.firstElementChild.id.split("-");
+                    child_id = child_arry[child_arry.length-1];
+
+                    parent_arry = firstNonIndentedBefore.firstElementChild.id.split("-");
+                    parent_id = parent_arry[parent_arry.length-1];
+            
+                    fetch(`/task/${child_id}`, {
+                        method: 'PUT',
+                        body: JSON.stringify({
+                            parent: parent_id, 
+                        })
+                    }); 
+                }
+                
+
+            } 
+        });
+    
     }
     
     sortableList.addEventListener("dragover", initSortableList);
@@ -63,7 +111,7 @@ function edit_task(task_id){
     })
     .then(response => response.json()) 
     .then (datetimes => {
-        console.log(datetimes);
+    
         document.querySelector(`#input-due-date-${task_id}`).value = datetimes.due_date;
         document.querySelector(`#input-scheduled-date-${task_id}`).value = datetimes.scheduled_date;
         //document.querySelector(`#input-scheduled-date-${task_id}`).value = '2024-01-01';
@@ -98,7 +146,9 @@ function save_edit(task_id){
         list_item = document.querySelector(`#edit-task-body-${task_id}`).children[0];
         list_item.innerHTML = description;
         date = document.querySelector(`#edit-task-body-${task_id}`).children[1];
-        date.innerHTML = `<b>Due:</b> ${due_date} <b>Scheduled:</b> ${scheduled_date}`
+        date.innerHTML = `<span class="material-symbols-outlined">schedule</span> ${due_date} <span class="material-symbols-outlined">
+event
+</span> ${scheduled_date}`
 
         
         /* 
