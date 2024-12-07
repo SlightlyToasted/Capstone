@@ -12,5 +12,6 @@ urlpatterns = [
 
     #sandbox
     path("list", views.drag_drop_list, name="drag_drop_list"),
+    path("kanban", views.kanban, name="kanban"),
    
 ]

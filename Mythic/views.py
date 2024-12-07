@@ -106,3 +106,7 @@ def task_datetime(request, task_id):
     task = Task.objects.get(pk=task_id)
     if request.method == "GET":
         return JsonResponse(task.get_datetime())
+    
+
+def kanban(request):
+    return render(request, "mythic/kanban.html")

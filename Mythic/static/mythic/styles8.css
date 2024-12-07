@@ -126,3 +126,7 @@ body {
 .material-symbols-outlined{
   font-size: 12px;
 }
+
+.virtual-item {
+  visibility: hidden; /* Hide the virtual item */
+}

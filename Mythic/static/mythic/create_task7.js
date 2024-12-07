@@ -15,48 +15,48 @@ document.addEventListener('DOMContentLoaded', function() {
     const initSortableList = (e) => {
         e.preventDefault();
         const draggingItem = document.querySelector(".dragging");
-        // Getting all items except currently dragging and making array of them
         let siblings = [...sortableList.querySelectorAll(".item:not(.dragging)")];
         let dragged_item = sortableList.querySelector(".item.dragging");
-
-        // Finding the sibling after which the dragging item should be placed
         let nextSibling = siblings.find(sibling => {
             return e.clientY <= sibling.offsetTop + sibling.offsetHeight / 2;
         });
-            
-        if (typeof nextSibling != 'undefined'){
+    
+        // Remove any existing indentation
+        dragged_item.classList.remove("indented"); 
+    
+        // Apply indentation if it's not the first item and there's a next sibling
+        if (typeof nextSibling != 'undefined' && draggingItem !== sortableList.firstElementChild) { 
             if (e.clientX >= nextSibling.offsetLeft + nextSibling.offsetWidth / 2){
                 dragged_item.classList.add("indented");
-                
-            }
-            else {
-                dragged_item.classList.remove("indented");
-            }
-        }
+            } 
+        } 
+    
         sortableList.insertBefore(draggingItem, nextSibling);
     }
 
     function set_order() {
         updated_list = document.querySelectorAll(".item:not(.indented)");
         updated_list.forEach(function(item, index) {
-
-            arry = item.children[1].id.split("-");
-            task_id = arry[arry.length-1];
-         
-            fetch(`/task/${task_id}`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    order: index,
-                    parent: "",
-                })
-            });
+     
+            if (item.children[0] !== undefined) {
+                arry = item.children[0].id.split("-");
+                task_id = arry[arry.length-1];
+             
+                fetch(`/task/${task_id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        order: index,
+                        parent: "",
+                    })
+                });
+            }
+            
         });
 
         //if a task is indented, find first task above that is not indented. Make that the parent.
         all_tasks = document.querySelectorAll(".item");
         all_tasks.forEach((item, index) => {
             if (item.classList.contains('indented')) {
-                console.log("Indented item at index " + index.toString());
                 let firstNonIndentedBefore = null;
 
                 for (let i = index - 1; i >= 0; i--) {

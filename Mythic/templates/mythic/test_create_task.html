@@ -11,8 +11,9 @@
         </form>
     </div>
 
+    <h1>Tasks</h1>
     <div class="sortable-list">
-        <h1>Tasks</h1>
+       
         {% for task in tasks %}
             <div class="item" draggable="true">
                 <div id="proj-colour-{{ task.id }}" class="project-colour" style="background-color: #{{ task.project.colour }};"></div> 
@@ -92,6 +93,7 @@
                 </div>
             {% endfor %}
         {% endfor %}
+            <div class="item" draggable="false" style="visibility: hidden;" id="ffff"></div>
         </div>
 
 {% endblock %}
